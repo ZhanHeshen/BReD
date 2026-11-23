@@ -1,0 +1,7 @@
+__pycache__/
+.venv/
+*.egg-info/
+build/
+dist/
+*.pt
+input.txt

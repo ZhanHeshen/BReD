@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bred-optim"
+version = "0.1.0"
+description = "Block Replay Dithering for optimizer states"
+requires-python = ">=3.9"
+dependencies = ["torch>=2.1", "triton>=2.1; sys_platform == 'linux'"]
+
+[tool.setuptools]
+packages = ["bred"]
+license-files = ["THIRD_PARTY_LICENSES"]
