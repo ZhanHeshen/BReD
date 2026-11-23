@@ -73,6 +73,11 @@ class MomentStorageTest(unittest.TestCase):
                             else:
                                 self.assertEqual(restored, value)
                 if cls is BReDMARS:
-                    previous = actual.state[params[0]]["last_grad"].clone()
+                    self.assertNotIn("last_grad", actual.state[params[0]])
+                    self.assertEqual(actual.state[params[0]]["last_grad_packed"].shape, (3, 18))
+                    self.assertEqual(actual.state[params[0]]["last_grad_packed"].dtype, torch.int8)
+                    self.assertEqual(actual.state[params[0]]["last_grad_shared_exp"].shape, (3, 2))
+                    self.assertIn("last_grad", actual.state[params[2]])
+                    previous = actual.state[params[0]]["last_grad_packed"].clone()
                     params[0].grad.zero_()
-                    torch.testing.assert_close(actual.state[params[0]]["last_grad"], previous)
+                    torch.testing.assert_close(actual.state[params[0]]["last_grad_packed"], previous)

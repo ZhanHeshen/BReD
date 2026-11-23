@@ -64,12 +64,14 @@ class _MARSAdamW(torch.optim.Optimizer):
 
 
 class BReDMARS(PackedMoments, _MARSAdamW):
-    """Approximate MARS-AdamW with MXFP4 or MXINT8 moments and an FP32 previous gradient.
+    """Approximate MARS-AdamW with MXFP4 or MXINT8 moments and an MXFP4 previous gradient.
 
     Matrices use MARS; other parameters use AdamW with the *_1d settings.
     Requires float32 parameters. Set quantization=False globally or per group
-    to keep dense moments. Exact MARS, AMSGrad, Lion and Shampoo are not included.
+    to keep dense states. Exact MARS, AMSGrad, Lion and Shampoo are not included.
     """
+
+    _packed_names = ("exp_avg", "exp_avg_sq", "last_grad")
 
     def __init__(self, params, lr=3e-3, betas=(0.95, 0.99), eps=1e-8,
                  weight_decay=0.0, gamma=0.025, lr_1d=None,

@@ -7,6 +7,8 @@ from ._optimizer import state_elem_format
 
 
 class PackedMoments:
+    _packed_names = ("exp_avg", "exp_avg_sq")
+
     def __init__(self, params, *, quantization=True, global_seed=0, state_format="mxfp4", **kwargs):
         super().__init__(params, **kwargs)
         self.defaults.update(quantization=quantization, global_seed=global_seed, state_format=state_format)
@@ -57,11 +59,12 @@ class PackedMoments:
             state = self.state[p]
             if "moment_step" not in state:
                 continue
-            for state_id, name in enumerate(("exp_avg", "exp_avg_sq")):
+            for state_id, name in enumerate(self._packed_names):
                 noise = block_dither(seed, blocks, tensor_id, state_id, state["moment_step"], p.device)
                 value = dequantize_mx_tri(
                     state[name + "_packed"], state[name + "_shared_exp"],
-                    elem_format=elem_format, round="subtract_dither", dither_rng=noise, output_shape=p.shape)
+                    elem_format="fp4_e2m1" if name == "last_grad" else elem_format,
+                    round="subtract_dither", dither_rng=noise, output_shape=p.shape)
                 state[name] = value.abs_() if state_id == 1 else value
 
         result = super().step()
@@ -69,10 +72,11 @@ class PackedMoments:
         for p, tensor_id, blocks, seed, elem_format in packed:
             state = self.state[p]
             step = state.get("moment_step", 0) + 1
-            for state_id, name in enumerate(("exp_avg", "exp_avg_sq")):
+            for state_id, name in enumerate(self._packed_names):
                 noise = block_dither(seed, blocks, tensor_id, state_id, step, p.device)
                 state[name + "_packed"], state[name + "_shared_exp"] = quantize_mx_tri(
-                    state[name], elem_format=elem_format, round="subtract_dither", dither_rng=noise)
+                    state[name], elem_format="fp4_e2m1" if name == "last_grad" else elem_format,
+                    round="subtract_dither", dither_rng=noise)
                 del state[name]
             state["moment_step"] = step
         return loss if closure is not None else result

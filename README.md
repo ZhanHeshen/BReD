@@ -11,7 +11,7 @@ in packed MXFP4 by default and replaying the same dither when decoding them.
 | AdamW | [`BReDAdamW`](bred/adamw.py) | First and second moments |
 | Muon | [`BReDMuon`](bred/muon.py) | Muon momentum |
 | NAdamW | [`BReDNAdamW`](bred/nadamw.py) | First and second moments |
-| MARS | [`BReDMARS`](bred/mars.py) | First and second moments; previous gradient stays FP32 |
+| MARS | [`BReDMARS`](bred/mars.py) | First and second moments, previous gradient |
 | SOAP | [`BReDSOAP`](bred/soap.py) | First and second moments, preconditioner statistics (`L/R`); eigenbases `Q` stay FP32 |
 
 NAdamW uses decoupled weight decay. MARS uses approximate MARS-AdamW for matrices
