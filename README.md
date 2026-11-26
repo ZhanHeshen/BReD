@@ -1,5 +1,6 @@
-# BReD
-Code of paper "BReD: Block Replay Dithering for Stable Low-Bit EMA Optimizer States"
+# BReD: Block Replay Dithering for Stable Low-Bit EMA Optimizer States
+
+Code of paper "[BReD: Block Replay Dithering for Stable Low-Bit EMA Optimizer States](https://arxiv.org/abs/2611.33951)"
 
 Block Replay Dithering (BReD) reduces optimizer-state memory by storing states
 in packed MXFP4 by default and replaying the same dither when decoding them.
@@ -73,3 +74,19 @@ Our optimizer implementations build on [PyTorch](https://github.com/pytorch/pyto
 and [SOAP](https://github.com/nikhilvyas/SOAP). The example model is adapted from
 [nanoGPT](https://github.com/karpathy/nanoGPT). We thank the authors for sharing their work.
 Third-party notices are collected in [THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES).
+
+## Citation
+
+If you find this work useful, please cite:
+
+```bibtex
+@misc{zhan2026bredblockreplaydithering,
+  title={{BReD}: Block Replay Dithering for Stable Low-Bit {EMA} Optimizer States},
+  author={Heshen Zhan and Youhan Huang and Yunke Peng and Yao Wang and Linghui Kong and Ziwei Zhu and Qingyu Han and Yaoyuan Wang and Congliang Chen and Ruoyu Sun},
+  year={2026},
+  eprint={2611.33951},
+  archivePrefix={arXiv},
+  primaryClass={cs.LG},
+  url={https://arxiv.org/abs/2611.33951},
+}
+```
